@@ -252,12 +252,6 @@ class SdA(object):
         (valid_set_x, valid_set_y) = datasets[1]
         (test_set_x, test_set_y) = datasets[2]
 
-        #min_y = numpy.min(numpy.array((numpy.min(train_set_y), numpy.min(valid_set_y), numpy.min(test_set_y))))
-        min_y = 1
-        train_set_y -= min_y
-        valid_set_y -= min_y
-        test_set_y -= min_y
-
         # compute number of minibatches for training, validation and testing
         n_valid_batches = valid_set_x.get_value(borrow=True).shape[0]
         n_valid_batches /= batch_size
@@ -333,21 +327,28 @@ class SdA(object):
 
     def get_encoding(self, X):
 
-        code_x = []
+        #code_x = []
 
-        for x in X:
-            for dA in self.dA_layers:
-                x = dA.get_hidden_values(x)
+        #for x in X:
+         #   for dA in self.dA_layers:
+          #      x = dA.get_hidden_values(x)
 
-            code_x += [x.eval()]
+           # code_x += [x.eval()]
 
-        return np.array(code_x)
+        #return np.array(code_x)
+
+        x = X
+
+        for dA in self.dA_layers:
+            x = dA.get_hidden_values(x)
+
+        return x.eval()
 
 
 def train_SdA(finetune_lr=0.1, pretraining_epochs=15,
              pretrain_lr=0.001, training_epochs=1000,
              dataset='mnist.pkl.gz', batch_size=1, hidden_layers_sizes=[1000, 1000, 1000], n_ins = 784, 
-             n_outs=10, corruption_levels = [.1, .2, .3]):
+             n_outs=10, corruption_levels = [.3, .5, .7]):
     """
     Demonstrates how to train and test a stochastic denoising autoencoder.
 
@@ -376,12 +377,6 @@ def train_SdA(finetune_lr=0.1, pretraining_epochs=15,
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
     test_set_x, test_set_y = datasets[2]
-
-    #min_y = numpy.min(numpy.array((numpy.min(train_set_y), numpy.min(valid_set_y), numpy.min(test_set_y))))
-    min_y = 1
-    train_set_y -= min_y
-    valid_set_y -= min_y
-    test_set_y -= min_y
 
     # compute number of minibatches for training, validation and testing
     n_train_batches = train_set_x.get_value(borrow=True).shape[0]
@@ -514,6 +509,8 @@ def train_SdA(finetune_lr=0.1, pretraining_epochs=15,
     print >> sys.stderr, ('The training code for file ' +
                           os.path.split(__file__)[1] +
                           ' ran for %.2fm' % ((end_time - start_time) / 60.))
+
+    return sda
 
 
 if __name__ == '__main__':
