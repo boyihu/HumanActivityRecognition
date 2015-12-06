@@ -1,0 +1,6 @@
+copy mat files to data
+run getdataset.sh
+get NeuralNet usign Sda
+get encoding
+save encoding in reqd format
+

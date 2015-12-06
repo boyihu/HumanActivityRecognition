@@ -332,7 +332,6 @@ class SdA(object):
 
 
     def get_encoding(self, X):
-            '''Given a vector input x generates the final encoded output'''
 
         code_x = []
 
