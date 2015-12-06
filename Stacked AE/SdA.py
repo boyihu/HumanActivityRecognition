@@ -252,9 +252,11 @@ class SdA(object):
         (valid_set_x, valid_set_y) = datasets[1]
         (test_set_x, test_set_y) = datasets[2]
 
-        train_set_y -= 1
-        valid_set_y -= 1
-        test_set_y -= 1
+        #min_y = numpy.min(numpy.array((numpy.min(train_set_y), numpy.min(valid_set_y), numpy.min(test_set_y))))
+        min_y = 1
+        train_set_y -= min_y
+        valid_set_y -= min_y
+        test_set_y -= min_y
 
         # compute number of minibatches for training, validation and testing
         n_valid_batches = valid_set_x.get_value(borrow=True).shape[0]
@@ -267,7 +269,7 @@ class SdA(object):
         # compute the gradients with respect to the model parameters
         gparams = T.grad(self.finetune_cost, self.params)
 
-        print learning_rate
+        #print learning_rate
 
         # compute list of fine-tuning updates
         updates = [
@@ -329,13 +331,18 @@ class SdA(object):
         return train_fn, valid_score, test_score
 
 
-    def get_encoding(self, x):
+    def get_encoding(self, X):
             '''Given a vector input x generates the final encoded output'''
 
+        code_x = []
+
+        for x in X:
             for dA in self.dA_layers:
                 x = dA.get_hidden_values(x)
 
-            return x.eval()
+            code_x += [x.eval()]
+
+        return np.array(code_x)
 
 
 def train_SdA(finetune_lr=0.1, pretraining_epochs=15,
@@ -371,9 +378,11 @@ def train_SdA(finetune_lr=0.1, pretraining_epochs=15,
     valid_set_x, valid_set_y = datasets[1]
     test_set_x, test_set_y = datasets[2]
 
-    train_set_y -= 1
-    valid_set_y -= 1
-    test_set_y -= 1
+    #min_y = numpy.min(numpy.array((numpy.min(train_set_y), numpy.min(valid_set_y), numpy.min(test_set_y))))
+    min_y = 1
+    train_set_y -= min_y
+    valid_set_y -= min_y
+    test_set_y -= min_y
 
     # compute number of minibatches for training, validation and testing
     n_train_batches = train_set_x.get_value(borrow=True).shape[0]
@@ -427,7 +436,7 @@ def train_SdA(finetune_lr=0.1, pretraining_epochs=15,
     # get the training, validation and testing function for the model
     print '... getting the finetuning functions'
 
-    print finetune_lr
+    #print finetune_lr
 
     train_fn, validate_model, test_model = sda.build_finetune_functions(
         datasets=datasets,
