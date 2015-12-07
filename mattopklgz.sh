@@ -1,7 +1,8 @@
 numdir=`cat project_01/windowandoverlaplist.txt | wc -l`
-numdir=1
+#numdir=1
 for ((i=1; i<=$numdir; i++))
 do
+	echo "Run $i of $numdir..."
 	echo "Copying Mat files to Data Directory: $i"
 	cp project_01/Datasets/$i/* data/
 
@@ -12,7 +13,20 @@ do
 	cd Stacked\ AE/
 	mkdir Ahmed/$i
 	mkdir Xin/$i
-	python pythonWrapperforSda.py  <<< "1"
+
+	echo "Running Stacked Auto Encoder"
+	python pythonWrapperforSda.py  <<< "$i"
+
+	echo "Saving Results to directories"
+	cp ../data/info.txt Xin/$i
+	cd Xin/$i
+	cat info1.txt info.txt > newfile
+
+	rm info1.txt info.txt
+	mv newfile info.txt
+	cp info.txt ../../Ahmed/$i
+	
+	cd ../../../
 
 	
 done

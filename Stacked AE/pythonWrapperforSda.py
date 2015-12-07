@@ -11,11 +11,13 @@ filenames = ['acc_X', 'acc_Y', 'acc_Z', 'gyro_X', 'gyro_Y', 'gyro_Z']
 f = open ("../data/info.txt")
 windowoverlaplist  = []
 contents = f.read().splitlines()
-window=contents[1]
-overlap=contents[1]
+window=int(contents[1])
+overlap=int(contents[3])
 
-hidden = [[int(0.9*window)], [110,90], [115, 100, 90]]
+hidden = [[int(0.9*window)], [int(0.85*window), int(0.75*window)], [115, 100, 90]]
 corrupt = [[0.1], [0.1,0.15], [0.01, 0.02, 0.03]]
+pretrain_ep = 10
+train_ep = 1
 
 bigmatrix = np.empty(shape=(0,0))
 bigtest = np.empty(shape = (0,0))
@@ -23,7 +25,7 @@ for nam in filenames:
 	name = nam + '.pkl.gz'
 	print name
 	sda = SdA.train_SdA(dataset=name, hidden_layers_sizes=hidden[1], \
-		corruption_levels=corrupt[1], pretraining_epochs=10, training_epochs=1, n_ins=window, n_outs=6)
+		corruption_levels=corrupt[1], pretraining_epochs=pretrain_ep, training_epochs=train_ep, n_ins=window, n_outs=6)
 
 	f = gzip.open('../data/'+name, 'rb')
 
@@ -59,8 +61,15 @@ for nam in filenames:
 		np.savetxt('Xin/'+folder_name + '/' + 'X_test.txt', bigtest[:,:-1], delimiter=' ')
 		np.savetxt('Xin/'+folder_name + '/' + 'y_test.txt', test_Y, delimiter=' ')
 
-		f=open("Xin/"+folder_name+ '/' + "info.txt")
-		f.write()
+		f=open("Xin/"+folder_name+ '/' + "info1.txt", "w")
+		f.write("Hidden Layers Pretraining_Epochs Training_epochs Corruption\n")
+		f.write(repr(hidden[1])+' '+ str(pretrain_ep)+" "+str(train_ep)+" "+repr(corrupt[1])+'\n')
+		f.write("HiddenLayers Pretraining_Epochs Training_epochs Corruption\n")
+		f.write(repr(hidden[1])+' '+ str(pretrain_ep)+" "+str(train_ep)+" "+repr(corrupt[1])+'\n')
+		f.write("TrainingDataDim1 TrainingDataDim2 TestDataDim1 TestDataDim2\n")
+		f.write(repr(bigmatrix.shape[0]) + ' ' + repr(bigmatrix.shape[1]) + ' ' + repr(bigtest.shape[0]) + ' ' + repr(bigtest.shape[1]) + '\n')
+
+		f.close()
 
 print bigmatrix.shape
 print bigtest.shape
