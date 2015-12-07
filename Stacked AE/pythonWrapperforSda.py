@@ -62,8 +62,6 @@ for nam in filenames:
 		np.savetxt('Xin/'+folder_name + '/' + 'y_test.txt', test_Y, delimiter=' ')
 
 		f=open("Xin/"+folder_name+ '/' + "info1.txt", "w")
-		f.write("Hidden Layers Pretraining_Epochs Training_epochs Corruption\n")
-		f.write(repr(hidden[1])+' '+ str(pretrain_ep)+" "+str(train_ep)+" "+repr(corrupt[1])+'\n')
 		f.write("HiddenLayers Pretraining_Epochs Training_epochs Corruption\n")
 		f.write(repr(hidden[1])+' '+ str(pretrain_ep)+" "+str(train_ep)+" "+repr(corrupt[1])+'\n')
 		f.write("TrainingDataDim1 TrainingDataDim2 TestDataDim1 TestDataDim2\n")
