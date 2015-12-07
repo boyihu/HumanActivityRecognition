@@ -8,7 +8,7 @@ do
 	cd Stacked\ AE/
 	sh getDataset.sh
 	cd ../
-	rm data/*.mat data/info.txt
+	rm data/*.mat
 
 	
 done
