@@ -3,8 +3,10 @@ import gzip
 import cPickle
 import numpy as np
 
+folder_name=raw_input()
+
 filenames = ['acc_X', 'acc_Y', 'acc_Z', 'gyro_X', 'gyro_Y', 'gyro_Z']
-filenames = ['acc_X', 'acc_Y']
+# filenames = ['acc_X', 'acc_Y']
 
 f = open ("../data/info.txt")
 windowoverlaplist  = []
@@ -12,7 +14,7 @@ contents = f.read().splitlines()
 window=contents[1]
 overlap=contents[1]
 
-hidden = [[110], [110,90], [115, 100, 90]]
+hidden = [[int(0.9*window)], [110,90], [115, 100, 90]]
 corrupt = [[0.1], [0.1,0.15], [0.01, 0.02, 0.03]]
 
 bigmatrix = np.empty(shape=(0,0))
@@ -20,8 +22,8 @@ bigtest = np.empty(shape = (0,0))
 for nam in filenames:
 	name = nam + '.pkl.gz'
 	print name
-	sda = SdA.train_SdA(dataset=name, hidden_layers_sizes=hidden[0], \
-		corruption_levels=corrupt[0], pretraining_epochs=15, training_epochs=1, n_ins=128, n_outs=6)
+	sda = SdA.train_SdA(dataset=name, hidden_layers_sizes=hidden[1], \
+		corruption_levels=corrupt[1], pretraining_epochs=10, training_epochs=1, n_ins=window, n_outs=6)
 
 	f = gzip.open('../data/'+name, 'rb')
 
@@ -43,10 +45,23 @@ for nam in filenames:
 	bigmatrix = np.concatenate((bigmatrix, h_train_X), axis=1)
 	bigtest = np.concatenate((bigtest, h_test_X), axis=1)
 
-	if name == filenames[-1]:
-		bigmatrix = np.concatenate((bigmatrix, train_Y), axis=1)
-		bigtest = np.concatenate((bigtest, test_Y), axis=1)
+	if nam == filenames[-1]:
+		print 'Saving files'
 
-np.savetxt()
+		bigmatrix = np.concatenate((bigmatrix, np.matrix(train_Y).T), axis=1)
+		bigtest = np.concatenate((bigtest, np.matrix(test_Y).T), axis=1)
+		
+		np.savetxt('Ahmed/'+folder_name + '/' + 'training.txt', bigmatrix, delimiter=' ')
+		np.savetxt('Ahmed/'+folder_name + '/' + 'test.txt', bigtest, delimiter=' ')
+
+		np.savetxt('Xin/'+folder_name + '/' + 'X_train.txt', bigmatrix[:,:-1], delimiter=' ')
+		np.savetxt('Xin/'+folder_name + '/' + 'y_train.txt', test_Y, delimiter=' ')
+		np.savetxt('Xin/'+folder_name + '/' + 'X_test.txt', bigtest[:,:-1], delimiter=' ')
+		np.savetxt('Xin/'+folder_name + '/' + 'y_test.txt', test_Y, delimiter=' ')
+
+		f=open("Xin/"+folder_name+ '/' + "info.txt")
+		f.write()
+
 print bigmatrix.shape
+print bigtest.shape
 

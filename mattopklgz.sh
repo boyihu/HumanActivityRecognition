@@ -9,6 +9,10 @@ do
 	sh getDataset.sh
 	cd ../
 	rm data/*.mat
+	cd Stacked\ AE/
+	mkdir Ahmed/$i
+	mkdir Xin/$i
+	python pythonWrapperforSda.py  <<< "1"
 
 	
 done
