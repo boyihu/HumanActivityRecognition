@@ -348,7 +348,7 @@ class SdA(object):
 def train_SdA(finetune_lr=0.1, pretraining_epochs=15,
              pretrain_lr=0.001, training_epochs=1000,
              dataset='mnist.pkl.gz', batch_size=1, hidden_layers_sizes=[1000, 1000, 1000], n_ins = 784, 
-             n_outs=10, corruption_levels = [.3, .5, .7]):
+             n_outs=10, corruption_levels = [.3, .5, .784]):
     """
     Demonstrates how to train and test a stochastic denoising autoencoder.
 
