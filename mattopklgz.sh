@@ -13,7 +13,6 @@ do
 	cd ../
 	rm data/*.mat
 	cd Stacked\ AE/
-	mkdir Ahmed/$i
 	mkdir Xin/$i
 
 	echo "Running Stacked Auto Encoder"
@@ -26,7 +25,6 @@ do
 
 	rm info1.txt info.txt
 	mv newfile info.txt
-	cp info.txt ../../Ahmed/$i
 	
 	cd ../../../
 

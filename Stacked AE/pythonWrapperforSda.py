@@ -15,9 +15,9 @@ contents = f.read().splitlines()
 window=int(contents[1])
 overlap=int(contents[3])
 
-hidden = [[int(0.9*window)], [int(0.85*window), int(0.75*window)], [115, 100, 90]]
-corrupt = [[0.1], [0.1,0.15], [0.01, 0.02, 0.03]]
-pretrain_ep = 10
+hidden = [[int(0.9*window)], [int(0.9*window), int(0.8*window), int(0.7*window)], [115, 100, 90]]
+corrupt = [[0.1], [0.001,0.0015,0.002], [0.01, 0.02, 0.03]]
+pretrain_ep = 25
 train_ep = 10
 
 bigmatrix = np.empty(shape=(0,0))
@@ -54,8 +54,8 @@ for nam in filenames:
 		bigmatrix = np.concatenate((bigmatrix, np.matrix(train_Y).T), axis=1)
 		bigtest = np.concatenate((bigtest, np.matrix(test_Y).T), axis=1)
 		
-		np.savetxt('Ahmed/'+folder_name + '/' + 'training.txt', bigmatrix, delimiter=' ')
-		np.savetxt('Ahmed/'+folder_name + '/' + 'test.txt', bigtest, delimiter=' ')
+#		np.savetxt('Ahmed/'+folder_name + '/' + 'training.txt', bigmatrix, delimiter=' ')
+#		np.savetxt('Ahmed/'+folder_name + '/' + 'test.txt', bigtest, delimiter=' ')
 
 		np.savetxt('Xin/'+folder_name + '/' + 'X_train.txt', bigmatrix[:,:-1], delimiter=' ')
 		np.savetxt('Xin/'+folder_name + '/' + 'y_train.txt', train_Y, delimiter=' ')
