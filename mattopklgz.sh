@@ -1,5 +1,7 @@
+#!/bin/bash
 numdir=`cat project_01/windowandoverlaplist.txt | wc -l`
 #numdir=1
+echo $numdir
 for ((i=1; i<=$numdir; i++))
 do
 	echo "Run $i of $numdir..."
